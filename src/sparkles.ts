@@ -1,7 +1,7 @@
-import { version } from '../package.json'
 import { PREFIX_NAME } from './const'
 
 // ts-prune-ignore-next
 export { TitleCard } from './cards/title-card/title-card'
 
-console.info(`%c✨ ${PREFIX_NAME} ✨ - ${version}`, 'color: #abeabe; font-weight: 700;')
+// @ts-ignore (VERSION is injected on build time)
+console.info(`%c✨ ${PREFIX_NAME} ✨ version: ${VERSION}`, 'color: #abeabe; font-weight: 700;')

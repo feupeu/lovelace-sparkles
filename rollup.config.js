@@ -45,7 +45,7 @@ const plugins = [
     babelHelpers: 'bundled',
   }),
   replace({
-    isDevelopment: dev,
+    VERSION: `'${process.env.VERSION ?? 'development'}'`,
     preventAssignment: false,
   }),
   ...(dev ? [serve(serveOptions)] : [terser()]),

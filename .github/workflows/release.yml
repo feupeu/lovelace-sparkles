@@ -13,17 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: npm install
-      - run: npm run build
-
       - uses: einaregilsson/build-number@v3
         id: buildnumber
         with:
           token: ${{secrets.github_token}}
           prefix: 'v'
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm install
+      - run: npm run build
+        env:
+          VERSION: 'v${{ steps.buildnumber.outputs.build_number }}'
 
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
