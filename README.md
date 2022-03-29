@@ -1,6 +1,6 @@
 # ✨ Sparkles
 
-// todo
+For of https://github.com/piitaya/lovelace-mushroom
 
 ## Development server
 
