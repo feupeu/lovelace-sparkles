@@ -5,6 +5,7 @@ import babel from '@rollup/plugin-babel'
 import json from '@rollup/plugin-json'
 import { terser } from 'rollup-plugin-terser'
 import serve from 'rollup-plugin-serve'
+import replace from '@rollup/plugin-replace'
 import ignore from './rollup-plugins/rollup-ignore-plugin.js'
 
 const IGNORED_FILES = [
@@ -42,6 +43,10 @@ const plugins = [
   babel({
     exclude: 'node_modules/**',
     babelHelpers: 'bundled',
+  }),
+  replace({
+    isDevelopment: dev,
+    preventAssignment: false,
   }),
   ...(dev ? [serve(serveOptions)] : [terser()]),
 ]
