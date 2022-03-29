@@ -28,8 +28,8 @@ jobs:
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: ${{ steps.buildnumber.outputs.build_number }}
+          automatic_release_tag: 'v${{ steps.buildnumber.outputs.build_number }}'
           prerelease: false
-          title: ${{ steps.buildnumber.outputs.build_number }}
+          title: 'Release v${{ steps.buildnumber.outputs.build_number }}'
           files: |
             dist/sparkles.js
