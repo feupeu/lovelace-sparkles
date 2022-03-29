@@ -22,6 +22,7 @@ jobs:
         id: buildnumber
         with:
           token: ${{secrets.github_token}}
+          prefix: 'v'
 
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
