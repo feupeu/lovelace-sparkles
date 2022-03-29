@@ -1,6 +1,18 @@
 # ✨ Sparkles
 
-For of https://github.com/piitaya/lovelace-mushroom
+Fork of https://github.com/piitaya/lovelace-mushroom
+
+## Installation
+
+### HACS
+
+1. Open HACS
+2. Click the tripe dots in the top right corner
+3. Choose "Custom reposetories"
+4. Entry repository: `https://github.com/feupeu/lovelace-sparkles`
+5. Select category: lovelace
+6. Click "Add"
+7. Install Sparkles through HACS
 
 ## Development server
 
