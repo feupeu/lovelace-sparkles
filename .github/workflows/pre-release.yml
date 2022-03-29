@@ -17,11 +17,17 @@ jobs:
           node-version: '16'
       - run: npm install
       - run: npm run build
+
+      - uses: einaregilsson/build-number@v3
+        id: buildnumber
+        with:
+          token: ${{secrets.github_token}}
+
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: 'v${{ env.GITHUB_RUN_NUMBER }}'
+          automatic_release_tag: ${{ steps.buildnumber.outputs.build_number }}
           prerelease: true
-          title: 'v${{ env.GITHUB_RUN_NUMBER }}'
+          title: ${{ steps.buildnumber.outputs.build_number }}
           files: |
             dist/sparkles.js
