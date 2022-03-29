@@ -1,0 +1,114 @@
+{
+  "editor": {
+    "form": {
+      "color_picker": {
+        "values": {
+          "default": "Default color"
+        }
+      },
+      "info_picker": {
+        "values": {
+          "default": "Default information",
+          "name": "Name",
+          "state": "State",
+          "last-changed": "Last Changed",
+          "last-updated": "Last Updated",
+          "none": "None"
+        }
+      },
+      "layout_picker": {
+        "values": {
+          "default": "Default layout",
+          "vertical": "Vertical layout",
+          "horizontal": "Horizontal layout"
+        }
+      },
+      "alignment_picker": {
+        "values": {
+          "default": "Default alignment",
+          "start": "Start",
+          "end": "End",
+          "center": "Center",
+          "justify": "Justify"
+        }
+      }
+    },
+    "card": {
+      "generic": {
+        "hide_name": "Hide name?",
+        "hide_state": "Hide state?",
+        "hide_icon": "Hide icon?",
+        "icon_color": "Icon color",
+        "layout": "Layout",
+        "primary_info": "Primary information",
+        "secondary_info": "Secondary information",
+        "content_info": "Content",
+        "use_entity_picture": "Use entity picture?"
+      },
+      "light": {
+        "show_brightness_control": "Brightness control?",
+        "use_light_color": "Use light color",
+        "show_color_temp_control": "Temperature color control?",
+        "show_color_control": "Color control?",
+        "incompatible_controls": "Some controls may not be displayed if your light does not support the feature."
+      },
+      "fan": {
+        "icon_animation": "Animate icon when active?",
+        "show_percentage_control": "Percentage control?",
+        "show_oscillate_control": "Oscillate control?"
+      },
+      "cover": {
+        "show_buttons_control": "Buttons control?",
+        "show_position_control": "Position control?"
+      },
+      "alarm_control_panel": {
+        "displayed_states": "Displayed states"
+      },
+      "template": {
+        "primary": "Primary information",
+        "secondary": "Secondary information",
+        "multiline_secondary": "Multiline secondary?",
+        "entity_extra": "Used in templates and actions",
+        "content": "Content"
+      },
+      "title": {
+        "title": "Title",
+        "subtitle": "Subtitle"
+      },
+      "chips": {
+        "alignment": "Alignment"
+      },
+      "weather": {
+        "show_conditions": "Conditions?",
+        "show_temperature": "Temperature?"
+      }
+    },
+    "chip": {
+      "sub_element_editor": {
+        "title": "Chip editor"
+      },
+      "conditional": {
+        "chip": "Chip"
+      },
+      "chip-picker": {
+        "chips": "Chips",
+        "details": "Show details by clicking the edit button",
+        "add": "Add chip",
+        "edit": "Edit",
+        "clear": "Clear",
+        "select": "Select chip",
+        "types": {
+          "action": "Action",
+          "alarm-control-panel": "Alarm",
+          "back": "Back",
+          "conditional": "Conditional",
+          "entity": "Entity",
+          "light": "Light",
+          "menu": "Menu",
+          "template": "Template",
+          "weather": "Weather"
+        }
+      }
+    }
+  }
+}

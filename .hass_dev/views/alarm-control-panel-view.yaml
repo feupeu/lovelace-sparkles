@@ -1,0 +1,64 @@
+title: Alarm control panel
+icon: mdi:shield
+cards:
+  - type: custom:mushroom-alarm-control-panel-card
+    entity: alarm_control_panel.alarm_panel_1
+    states:
+      - armed_home
+      - armed_away
+  - type: custom:mushroom-alarm-control-panel-card
+    entity: alarm_control_panel.alarm_panel_2
+    states:
+      - armed_home
+      - armed_away
+      - armed_night
+      - armed_vacation
+      - armed_custom_bypass
+    name: Alarm panel 2, custom name
+  - type: custom:mushroom-alarm-control-panel-card
+    entity: alarm_control_panel.templated_alarm_panel
+    states:
+      - armed_home
+      - armed_away
+      - armed_night
+    name: Template
+  - type: custom:mushroom-alarm-control-panel-card
+    entity: alarm_control_panel.alarm_panel_code
+    states:
+      - armed_home
+      - armed_away
+    name: Number code (1234)
+  - type: custom:mushroom-alarm-control-panel-card
+    entity: alarm_control_panel.alarm_panel_text_code
+    states:
+      - armed_home
+      - armed_away
+    name: Text code (azerty)
+  - type: vertical-stack
+    title: Layout
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: custom:mushroom-alarm-control-panel-card
+            entity: alarm_control_panel.alarm_panel_1
+            states:
+              - armed_home
+              - armed_away
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: custom:mushroom-alarm-control-panel-card
+            entity: alarm_control_panel.alarm_panel_1
+            states:
+              - armed_home
+              - armed_away
+            layout: "vertical"
+      - type: custom:mushroom-alarm-control-panel-card
+        entity: alarm_control_panel.alarm_panel_1
+        states:
+          - armed_home
+          - armed_away
+        layout: "horizontal"
