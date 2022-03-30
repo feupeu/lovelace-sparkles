@@ -7,6 +7,7 @@ export const cardConfigStruct = assign(
   lovelaceCardStruct,
   object({
     entity: string(),
+    icon: string(),
     tap_action: any(),
     hold_action: any(),
     double_tap_action: any(),

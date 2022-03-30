@@ -18,6 +18,7 @@ import { CARD_EDITOR_NAME, CARD_NAME } from './area-card-const'
 import { CardConfig, cardConfigStruct } from './area-card-config'
 import { assert } from 'superstruct'
 import { actionHandler } from '../../directives/action-handler-directive'
+import { TemplatedLitElement } from '../../utils/templated-lit-element'
 
 registerCard({
   type: CARD_NAME,
@@ -26,7 +27,7 @@ registerCard({
 })
 
 @customElement(CARD_NAME)
-export class AreaCard extends LitElement {
+export class AreaCard extends TemplatedLitElement {
   public static getStubConfig(): Record<string, unknown> {
     return {}
   }
@@ -60,6 +61,13 @@ export class AreaCard extends LitElement {
     return hasConfigOrEntityChanged(this, changedProps, false)
   }
 
+  protected updated(changedProps: PropertyValues): void {
+    super.updated(changedProps)
+    if (this.hass != null) {
+      this._registerTemplateKeys()
+    }
+  }
+
   // https://lit.dev/docs/components/rendering/
   protected render(): TemplateResult | void {
     // TODO Check for stateObj or other necessary things and render a warning if missing
@@ -81,7 +89,8 @@ export class AreaCard extends LitElement {
         tabindex="0"
         .label=${`Boilerplate: ${this.config.entity || 'No Entity Defined'}`}
       >
-        Mangler der noget indhold? <mwc-ripple></mwc-ripple>
+        <ha-state-icon .icon=${this.getTemplateValue('icon')}></ha-state-icon>
+        <mwc-ripple></mwc-ripple>
       </ha-card>
     `
   }
@@ -114,11 +123,18 @@ export class AreaCard extends LitElement {
     }
   }
 
+  private _registerTemplateKeys() {
+    this.registerTemplateKey('icon', { template: this.config?.icon ?? '' })
+  }
+
   // https://lit.dev/docs/components/styles/
   static get styles(): CSSResultGroup {
     return [
       css`
         ha-card {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           aspect-ratio: 1;
         }
       `,
