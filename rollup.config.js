@@ -58,6 +58,7 @@ export default [
       dir: 'dist',
       format: 'es',
     },
+    context: false, // øv
     plugins,
     inlineDynamicImports: true,
     moduleContext: (id) => {
