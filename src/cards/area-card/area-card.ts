@@ -1,6 +1,9 @@
 import '@material/mwc-ripple'
+import type { Ripple } from '@material/mwc-ripple'
+import { RippleHandlers } from '@material/mwc-ripple/ripple-handlers'
+
 import { LitElement, html, TemplateResult, css, PropertyValues, CSSResultGroup } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, eventOptions, property, queryAsync, state } from 'lit/decorators.js'
 import {
   HomeAssistant,
   hasConfigOrEntityChanged,
@@ -34,6 +37,10 @@ export class AreaCard extends LitElement {
 
   @state() private config!: CardConfig
 
+  @queryAsync('mwc-ripple') private _ripple!: Promise<Ripple | null>
+
+  @state() private _shouldRenderRipple = false
+
   // https://lit.dev/docs/components/properties/#accessors-custom
   public setConfig(_config: unknown): void {
     assert(_config, cardConfigStruct)
@@ -59,7 +66,13 @@ export class AreaCard extends LitElement {
 
     return html`
       <ha-card
-        .header="Hej med dig"
+        @focus=${this.handleRippleFocus}
+        @blur=${this.handleRippleBlur}
+        @mousedown=${this.handleRippleActivate}
+        @mouseup=${this.handleRippleDeactivate}
+        @touchstart=${this.handleRippleActivate}
+        @touchend=${this.handleRippleDeactivate}
+        @touchcancel=${this.handleRippleDeactivate}
         @action=${this._handleAction}
         .actionHandler=${actionHandler({
           hasHold: hasAction(this.config.hold_action),
@@ -68,9 +81,31 @@ export class AreaCard extends LitElement {
         tabindex="0"
         .label=${`Boilerplate: ${this.config.entity || 'No Entity Defined'}`}
       >
-        Mangler der noget indhold?</ha-card
-      >
+        Mangler der noget indhold? <mwc-ripple></mwc-ripple>
+      </ha-card>
     `
+  }
+
+  private _rippleHandlers: RippleHandlers = new RippleHandlers(() => {
+    this._shouldRenderRipple = true
+    return this._ripple
+  })
+
+  @eventOptions({ passive: true })
+  private handleRippleActivate(evt?: Event) {
+    this._rippleHandlers.startPress(evt)
+  }
+
+  private handleRippleDeactivate() {
+    this._rippleHandlers.endPress()
+  }
+
+  private handleRippleFocus() {
+    this._rippleHandlers.startFocus()
+  }
+
+  private handleRippleBlur() {
+    this._rippleHandlers.endFocus()
   }
 
   private _handleAction(event: ActionHandlerEvent): void {
