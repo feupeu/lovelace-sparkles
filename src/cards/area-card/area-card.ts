@@ -104,10 +104,10 @@ export class AreaCard extends TemplatedLitElement {
             <p class="secondary">Static secondary</p>
           </div>
         </div>
-          
+
         <div class="indicators">
           ${this.config.indicators.map((indicator) => {
-            return html` <dev-sparkles-indicator-element
+            return html`<dev-sparkles-indicator-element
               .hass=${this.hass}
               icon="${indicator.icon}"
               color="${indicator.color}"
@@ -115,8 +115,8 @@ export class AreaCard extends TemplatedLitElement {
               secondary="${indicator.secondary}"
             ></dev-sparkles-indicator-element>`
           })}
-        <div class="indicators">
-        
+        </div>
+
         <mwc-ripple></mwc-ripple>
       </ha-card>
     `
