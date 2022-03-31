@@ -1,7 +1,7 @@
 import '@material/mwc-ripple'
 import type { Ripple } from '@material/mwc-ripple'
 import { RippleHandlers } from '@material/mwc-ripple/ripple-handlers'
-
+import fastDeepEqual from 'fast-deep-equal'
 import { LitElement, html, TemplateResult, css, PropertyValues, CSSResultGroup } from 'lit'
 import { customElement, eventOptions, property, queryAsync, state } from 'lit/decorators.js'
 import {
@@ -45,10 +45,15 @@ export class AreaCard extends TemplatedLitElement {
   // https://lit.dev/docs/components/properties/#accessors-custom
   public setConfig(_config: unknown): void {
     assert(_config, cardConfigStruct)
-
     const config = _config as CardConfig
 
-    // getLovelace().setEditMode(true)
+    if (fastDeepEqual(this.config?.icon, config.icon) === false) {
+      this.unregisterTemplateKey('icon')
+    }
+
+    if (fastDeepEqual(this.config?.layout, config.layout) === false) {
+      this.unregisterTemplateKey('layout')
+    }
 
     this.config = config
   }
@@ -64,6 +69,7 @@ export class AreaCard extends TemplatedLitElement {
 
   protected updated(changedProps: PropertyValues): void {
     super.updated(changedProps)
+
     if (this.hass != null) {
       this._registerTemplateKeys()
     }
@@ -72,8 +78,6 @@ export class AreaCard extends TemplatedLitElement {
   // https://lit.dev/docs/components/rendering/
   protected render(): TemplateResult | void {
     // TODO Check for stateObj or other necessary things and render a warning if missing
-
-    console.log(this.getTemplateValue('layout'))
 
     return html`
       <ha-card
@@ -102,15 +106,17 @@ export class AreaCard extends TemplatedLitElement {
         </div>
           
         <div class="indicators">
-          ${this.config.indicators.map((_, i) => {
+          ${this.config.indicators.map((indicator) => {
             return html` <dev-sparkles-indicator-element
-              icon="${this.getTemplateValue('indicator_' + i + '_icon')}"
-              color="${this.getTemplateValue('indicator_' + i + '_color')}"
-              primary="${this.getTemplateValue('indicator_' + i + '_primary')}"
-              secondary="${this.getTemplateValue('indicator_' + i + '_secondary')}"
+              .hass=${this.hass}
+              icon="${indicator.icon}"
+              color="${indicator.color}"
+              primary="${indicator.primary}"
+              secondary="${indicator.secondary}"
             ></dev-sparkles-indicator-element>`
           })}
         <div class="indicators">
+        
         <mwc-ripple></mwc-ripple>
       </ha-card>
     `
@@ -147,13 +153,6 @@ export class AreaCard extends TemplatedLitElement {
   private _registerTemplateKeys() {
     this.registerTemplateKey('icon', { template: this.config?.icon ?? '' })
     this.registerTemplateKey('layout', { template: this.config?.layout ?? '' })
-
-    this.config?.indicators.forEach((indicator, i) => {
-      this.registerTemplateKey('indicator_' + i + '_icon', { template: indicator?.icon })
-      this.registerTemplateKey('indicator_' + i + '_primary', { template: indicator?.primary })
-      this.registerTemplateKey('indicator_' + i + '_secondary', { template: indicator?.secondary })
-      this.registerTemplateKey('indicator_' + i + '_color', { template: indicator?.color })
-    })
   }
 
   // https://lit.dev/docs/components/styles/

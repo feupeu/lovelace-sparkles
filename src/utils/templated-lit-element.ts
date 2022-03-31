@@ -1,4 +1,5 @@
 import { HomeAssistant } from 'custom-card-helpers'
+import fastDeepEqual from 'fast-deep-equal'
 import { UnsubscribeFunc } from 'home-assistant-js-websocket'
 import { LitElement } from 'lit'
 import { state } from 'lit/decorators.js'
@@ -10,6 +11,10 @@ interface TemplateRegistration {
   variables?: Record<string, unknown>
 }
 
+interface MaybeTemplateRegistration extends Omit<TemplateRegistration, 'template'> {
+  template?: string
+}
+
 export abstract class TemplatedLitElement extends LitElement {
   abstract hass?: HomeAssistant
 
@@ -18,17 +23,44 @@ export abstract class TemplatedLitElement extends LitElement {
 
   public disconnectedCallback() {
     super.disconnectedCallback()
-    this.disconnectTemplateKeys()
+    this.unregisterTemplateKeys()
   }
 
   protected getTemplateValue(key: string) {
     return this._results[key]?.result ?? ''
   }
 
+  protected reregisterTemplateKey(key: string, maybeRegistration: MaybeTemplateRegistration) {
+    this.unregisterTemplateKey(key)
+    if (maybeRegistration.template !== undefined) {
+      this.registerTemplateKey(key, {
+        template: maybeRegistration.template,
+        entity_ids: maybeRegistration.entity_ids,
+        variables: maybeRegistration.variables,
+      })
+    }
+  }
+
   protected async registerTemplateKey(key: string, registration: TemplateRegistration) {
     const { template, entity_ids = [], variables = {} } = registration
 
-    // TODO Check if there is any printed templating i.e contains "{{" then register, else just print the value it self
+    // template is not actually a template, not need to register anything
+    if (template.includes('{{') === false && this._results[key]?.result !== template) {
+      this._results = {
+        ...this._results,
+        [key]: {
+          result: template,
+          listeners: {
+            all: false,
+            domains: [],
+            entities: [],
+            time: false,
+          },
+        },
+      }
+
+      return // don't do anything else
+    }
 
     if (this._unsubscribers.has(key)) {
       return // already registered
@@ -40,9 +72,12 @@ export abstract class TemplatedLitElement extends LitElement {
       const unsubscribeFunc = await subscribeRenderTemplate(
         this.hass!.connection,
         (result) => {
-          this._results = {
-            ...this._results,
-            [key]: result,
+          // update _results, if the evaluation is different
+          if (fastDeepEqual(result, this._results[key]) === false) {
+            this._results = {
+              ...this._results,
+              [key]: result,
+            }
           }
         },
         {
@@ -76,13 +111,13 @@ export abstract class TemplatedLitElement extends LitElement {
     }
   }
 
-  protected disconnectTemplateKeys() {
+  protected unregisterTemplateKeys() {
     for (const key of this._unsubscribers.keys()) {
-      this.disconnectTemplateKey(key)
+      this.unregisterTemplateKey(key)
     }
   }
 
-  protected disconnectTemplateKey(key: string) {
+  protected unregisterTemplateKey(key: string) {
     const unsubscribe = this._unsubscribers.get(key)
     if (unsubscribe === undefined) {
       return // nothing to unsubscribe

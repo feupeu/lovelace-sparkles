@@ -38,11 +38,11 @@ export class TitleCard extends TemplatedLitElement implements LovelaceCard {
 
   setConfig(config: TitleCardConfig): void {
     if (this._config?.title !== config.title) {
-      this.disconnectTemplateKey('title')
+      this.unregisterTemplateKey('title')
     }
 
     if (this._config?.subtitle !== config.subtitle) {
-      this.disconnectTemplateKey('subtitle')
+      this.unregisterTemplateKey('subtitle')
     }
 
     this._config = config
