@@ -28,6 +28,8 @@ export abstract class TemplatedLitElement extends LitElement {
   protected async registerTemplateKey(key: string, registration: TemplateRegistration) {
     const { template, entity_ids = [], variables = {} } = registration
 
+    // TODO Check if there is any printed templating i.e contains "{{" then register, else just print the value it self
+
     if (this._unsubscribers.has(key)) {
       return // already registered
     }

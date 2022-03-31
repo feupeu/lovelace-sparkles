@@ -45,8 +45,6 @@ class ActionHandler extends HTMLElement implements ActionHandler {
       zIndex: '999',
     })
 
-    console.log('cc', this)
-
     this.appendChild(this.ripple)
     this.ripple.primary = true
     ;['touchcancel', 'mouseout', 'mouseup', 'touchmove', 'mousewheel', 'wheel', 'scroll'].forEach((ev) => {

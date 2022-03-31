@@ -45,6 +45,7 @@ export class AreaCard extends TemplatedLitElement {
   // https://lit.dev/docs/components/properties/#accessors-custom
   public setConfig(_config: unknown): void {
     assert(_config, cardConfigStruct)
+
     const config = _config as CardConfig
 
     // getLovelace().setEditMode(true)
@@ -72,6 +73,8 @@ export class AreaCard extends TemplatedLitElement {
   protected render(): TemplateResult | void {
     // TODO Check for stateObj or other necessary things and render a warning if missing
 
+    console.log(this.getTemplateValue('layout'))
+
     return html`
       <ha-card
         @focus=${this.handleRippleFocus}
@@ -87,9 +90,27 @@ export class AreaCard extends TemplatedLitElement {
           hasDoubleClick: hasAction(this.config.double_tap_action),
         })}
         tabindex="0"
+        class="${this.getTemplateValue('layout') === 'horizontal' ? 'horizontal-layout' : 'vertical-layout'}"
         .label=${`Boilerplate: ${this.config.entity || 'No Entity Defined'}`}
       >
-        <ha-state-icon .icon=${this.getTemplateValue('icon')}></ha-state-icon>
+        <div class="title-wrapper">
+          <ha-icon .icon=${this.getTemplateValue('icon')}></ha-icon>
+          <div class="text-wrapper">
+            <p class="primary">Static primary</p>
+            <p class="secondary">Static secondary</p>
+          </div>
+        </div>
+          
+        <div class="indicators">
+          ${this.config.indicators.map((_, i) => {
+            return html` <dev-sparkles-indicator-element
+              icon="${this.getTemplateValue('indicator_' + i + '_icon')}"
+              color="${this.getTemplateValue('indicator_' + i + '_color')}"
+              primary="${this.getTemplateValue('indicator_' + i + '_primary')}"
+              secondary="${this.getTemplateValue('indicator_' + i + '_secondary')}"
+            ></dev-sparkles-indicator-element>`
+          })}
+        <div class="indicators">
         <mwc-ripple></mwc-ripple>
       </ha-card>
     `
@@ -125,6 +146,14 @@ export class AreaCard extends TemplatedLitElement {
 
   private _registerTemplateKeys() {
     this.registerTemplateKey('icon', { template: this.config?.icon ?? '' })
+    this.registerTemplateKey('layout', { template: this.config?.layout ?? '' })
+
+    this.config?.indicators.forEach((indicator, i) => {
+      this.registerTemplateKey('indicator_' + i + '_icon', { template: indicator?.icon })
+      this.registerTemplateKey('indicator_' + i + '_primary', { template: indicator?.primary })
+      this.registerTemplateKey('indicator_' + i + '_secondary', { template: indicator?.secondary })
+      this.registerTemplateKey('indicator_' + i + '_color', { template: indicator?.color })
+    })
   }
 
   // https://lit.dev/docs/components/styles/
@@ -133,9 +162,43 @@ export class AreaCard extends TemplatedLitElement {
       css`
         ha-card {
           display: flex;
+          padding: 1rem;
+          gap: 1rem;
+          flex-direction: column;
+        }
+
+        ha-card.horizontal-layout {
+          flex-direction: row;
+        }
+
+        .title-wrapper {
+          flex-direction: column;
+          display: flex;
           align-items: center;
           justify-content: center;
+          gap: 1rem;
+        }
+
+        .title-wrapper .text-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        .title-wrapper .text-wrapper p {
+          margin: 0;
+        }
+
+        .title-wrapper .text-wrapper .primary {
+          font-size: 1.3rem;
+        }
+
+        .title-wrapper ha-icon {
+          width: 100px;
+          height: 100px;
           aspect-ratio: 1;
+          --mdc-icon-size: 100%;
         }
       `,
     ]
