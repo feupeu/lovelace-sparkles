@@ -2,6 +2,9 @@ import { noChange } from 'lit'
 import { AttributePart, directive, Directive, DirectiveParameters } from 'lit/directive.js'
 import { ActionHandlerDetail, ActionHandlerOptions } from 'custom-card-helpers/dist/types'
 import { fireEvent } from 'custom-card-helpers'
+import { PREFIX_NAME } from '../const'
+
+const ACTION_HANDLER_NAME = `action-handler-${PREFIX_NAME}` as const
 
 const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.maxTouchPoints > 0
 
@@ -159,15 +162,15 @@ class ActionHandler extends HTMLElement implements ActionHandler {
   }
 }
 
-customElements.define('action-handler-sparkles', ActionHandler)
+customElements.define(ACTION_HANDLER_NAME, ActionHandler)
 
 const getActionHandler = (): ActionHandler => {
   const body = document.body
-  if (body.querySelector('action-handler-sparkles')) {
-    return body.querySelector('action-handler-sparkles') as ActionHandler
+  if (body.querySelector(ACTION_HANDLER_NAME)) {
+    return body.querySelector(ACTION_HANDLER_NAME) as ActionHandler
   }
 
-  const actionhandler = document.createElement('action-handler-sparkles')
+  const actionhandler = document.createElement(ACTION_HANDLER_NAME)
   body.appendChild(actionhandler)
 
   return actionhandler as ActionHandler
